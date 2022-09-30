@@ -1,4 +1,4 @@
-INSERT INTO developers (first_name, last_name, birth_date, status, salary) VALUES
+INSERT INTO "developers" (first_name, last_name, birth_date, status, salary) VALUES
     ('Andre', 'Markov', '1990-04-17', True, RANDOM() * 5000),
     ('Bert', 'Rock', '1980-07-22', True, RANDOM() * 5000),
     ('Leo', 'Hofs', '1986-12-17', True, RANDOM() * 5000),
