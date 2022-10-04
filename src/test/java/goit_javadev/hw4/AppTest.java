@@ -1,4 +1,4 @@
-package org.example;
+package goit_javadev.hw4;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
