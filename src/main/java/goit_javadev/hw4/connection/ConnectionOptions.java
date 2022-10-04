@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class ConnectionOptions {
-    private String dbUrl;
-    private String dbUser;
-    private String dbPass;
-    private String dbName;
+    private final String dbUrl;
+    private final String dbUser;
+    private final String dbPass;
+    private final String dbName;
 
     public ConnectionOptions() {
         Dotenv dotenv = Dotenv.load();
