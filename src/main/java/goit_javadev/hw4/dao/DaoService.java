@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import goit_javadev.hw4.entity.Developer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
