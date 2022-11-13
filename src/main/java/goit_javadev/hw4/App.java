@@ -1,23 +1,20 @@
 package goit_javadev.hw4;
 
 
-import goit_javadev.hw4.connection.DbConnectionProvider;
-
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import goit_javadev.hw4.cli.Console;
+import goit_javadev.hw4.connection.DbConnectionProvider;
+import goit_javadev.hw4.dao.DeveloperDaoService;
+import goit_javadev.hw4.entity.Developer;
 
 public class App {
     public static void main(String[] args) {
         try (DbConnectionProvider connectionProvider = new DbConnectionProvider()) {
             Connection connection = connectionProvider.createConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM developers");
-            while (resultSet.next()) {
-                System.out.println("resultSet.getString(\"first_name\") = " + resultSet.getString("first_name"));
-            }
-            statement.close();
+
+            new Console(connection).init();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
