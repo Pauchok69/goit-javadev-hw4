@@ -18,6 +18,7 @@ public class ProjectDaoService extends DaoService {
     private final PreparedStatement insertSt;
     private final PreparedStatement deleteSt;
     private final PreparedStatement updateSt;
+    private final PreparedStatement findByNameSt;
 
     public ProjectDaoService(Connection connection) throws SQLException {
         super(connection);
@@ -32,6 +33,7 @@ public class ProjectDaoService extends DaoService {
         findSt = connection.prepareStatement("SELECT * FROM projects WHERE id = ?");
         deleteSt = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
         findAllSt = connection.prepareStatement("SELECT * FROM projects");
+        findByNameSt = connection.prepareStatement("SELECT * FROM projects WHERE name LIKE ?");
     }
 
     protected Project hydrate(ResultSet resultSet) throws SQLException {
@@ -44,7 +46,12 @@ public class ProjectDaoService extends DaoService {
         project.setBudget(resultSet.getDouble("budget"));
         project.setStatus(resultSet.getBoolean("status"));
         project.setDateStart(resultSet.getDate("date_start").toLocalDate());
-        project.setDateEnd(resultSet.getDate("date_end").toLocalDate());
+
+        Date dateEnd = resultSet.getDate("date_end");
+
+        if (dateEnd != null) {
+            project.setDateEnd(dateEnd.toLocalDate());
+        }
         project.setCost(resultSet.getDouble("cost"));
 
         return project;
@@ -116,5 +123,19 @@ public class ProjectDaoService extends DaoService {
         }
 
         return null;
+    }
+
+    public List<Project> findByName(String name) throws SQLException {
+        findByNameSt.setString(1, "%" + name + "%");
+
+        ResultSet resultSet = findByNameSt.executeQuery();
+
+        List<Project> result = new ArrayList<>();
+
+        while (resultSet.next()) {
+            result.add(hydrate(resultSet));
+        }
+
+        return result;
     }
 }
