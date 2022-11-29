@@ -33,7 +33,7 @@ public class ProjectDaoService extends DaoService {
         findSt = connection.prepareStatement("SELECT * FROM projects WHERE id = ?");
         deleteSt = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
         findAllSt = connection.prepareStatement("SELECT * FROM projects");
-        findByNameSt = connection.prepareStatement("SELECT * FROM projects WHERE name LIKE ?");
+        findByNameSt = connection.prepareStatement("SELECT * FROM projects WHERE name LIKE ? LIMIT 50");
     }
 
     protected Project hydrate(ResultSet resultSet) throws SQLException {

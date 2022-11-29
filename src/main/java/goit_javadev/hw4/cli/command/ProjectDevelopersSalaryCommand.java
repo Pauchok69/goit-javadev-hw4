@@ -19,11 +19,27 @@ public class ProjectDevelopersSalaryCommand extends Command {
     @Override
     public void run() {
         print("Enter project name:");
-        String projectName = getUserInput();
 
         try {
-            List<Project> projects = projectDaoService.findByName(projectName);
-            System.out.println("projects = " + projects);
+            while (true) {
+                String projectName = getUserInput();
+                List<Project> projects = projectDaoService.findByName(projectName);
+
+                int projectsSize = projects.size();
+
+                if (projectsSize < 1) {
+                    printf("There is no projects with name: \"%s\"%n", projectName);
+                } else if (projectsSize > 1) {
+                    print("Found more than 1 projects with current name:");
+                    projects.forEach(project -> print(project.getName()));
+                    print("You need to specify a project name.");
+                } else {
+                    Project project = projects.get(0);
+                    print("project = " + project);
+
+                    break;
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

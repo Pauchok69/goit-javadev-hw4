@@ -28,4 +28,8 @@ public abstract class Command implements CommandInterface {
     protected void print(String text) {
         System.out.println(text);
     }
+
+    protected void printf(String text, Object... args) {
+        System.out.printf(text, args);
+    }
 }
