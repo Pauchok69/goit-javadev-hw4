@@ -1,6 +1,7 @@
 package goit_javadev.hw4.cli.command;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 public abstract class Command implements CommandInterface {
     private Scanner scanner = null;
     @Getter
+    @Setter
     private Connection connection = null;
 
     protected Command() {
@@ -30,6 +32,8 @@ public abstract class Command implements CommandInterface {
     }
 
     protected void printf(String text, Object... args) {
-        System.out.printf(text, args);
+        String textWithNewLine = text + "%n";
+
+        System.out.printf(textWithNewLine, args);
     }
 }

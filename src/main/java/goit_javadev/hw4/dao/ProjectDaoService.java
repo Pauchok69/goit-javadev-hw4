@@ -1,16 +1,10 @@
 package goit_javadev.hw4.dao;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import goit_javadev.hw4.entity.Project;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import goit_javadev.hw4.entity.Developer;
-import goit_javadev.hw4.entity.Project;
 
 public class ProjectDaoService extends DaoService {
     private final PreparedStatement findAllSt;
@@ -19,6 +13,7 @@ public class ProjectDaoService extends DaoService {
     private final PreparedStatement deleteSt;
     private final PreparedStatement updateSt;
     private final PreparedStatement findByNameSt;
+    private final PreparedStatement getDevelopersSalarySumByProjectSt;
 
     public ProjectDaoService(Connection connection) throws SQLException {
         super(connection);
@@ -33,7 +28,10 @@ public class ProjectDaoService extends DaoService {
         findSt = connection.prepareStatement("SELECT * FROM projects WHERE id = ?");
         deleteSt = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
         findAllSt = connection.prepareStatement("SELECT * FROM projects");
-        findByNameSt = connection.prepareStatement("SELECT * FROM projects WHERE name LIKE ? LIMIT 50");
+        findByNameSt = connection.prepareStatement("SELECT * FROM projects WHERE LOWER(name) LIKE LOWER(?) LIMIT 50");
+        getDevelopersSalarySumByProjectSt = connection.prepareStatement(
+                "SELECT SUM(d.salary) sum FROM projects p INNER JOIN developers_projects dp ON p.id = dp.project_id INNER JOIN developers d ON d.id = dp.developer_id WHERE p.id = ? GROUP BY p.id;"
+        );
     }
 
     protected Project hydrate(ResultSet resultSet) throws SQLException {
@@ -137,5 +135,17 @@ public class ProjectDaoService extends DaoService {
         }
 
         return result;
+    }
+
+    public Float getDevelopersSalarySumByProject(long id) throws SQLException {
+        getDevelopersSalarySumByProjectSt.setLong(1, id);
+
+        ResultSet resultSet = getDevelopersSalarySumByProjectSt.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getFloat("sum");
+        }
+
+        return 0f;
     }
 }
