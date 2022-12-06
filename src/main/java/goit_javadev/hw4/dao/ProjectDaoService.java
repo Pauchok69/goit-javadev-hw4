@@ -12,7 +12,7 @@ public class ProjectDaoService extends DaoService {
     private final PreparedStatement insertSt;
     private final PreparedStatement deleteSt;
     private final PreparedStatement updateSt;
-    private final PreparedStatement findByNameSt;
+    private final PreparedStatement findByCaseSensitiveNameSt;
     private final PreparedStatement getDevelopersSalarySumByProjectSt;
 
     public ProjectDaoService(Connection connection) throws SQLException {
@@ -28,7 +28,7 @@ public class ProjectDaoService extends DaoService {
         findSt = connection.prepareStatement("SELECT * FROM projects WHERE id = ?");
         deleteSt = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
         findAllSt = connection.prepareStatement("SELECT * FROM projects");
-        findByNameSt = connection.prepareStatement("SELECT * FROM projects WHERE LOWER(name) LIKE LOWER(?) LIMIT 50");
+        findByCaseSensitiveNameSt = connection.prepareStatement("SELECT * FROM projects WHERE LOWER(name) LIKE LOWER(?) LIMIT 50");
         getDevelopersSalarySumByProjectSt = connection.prepareStatement(
                 "SELECT SUM(d.salary) sum FROM projects p INNER JOIN developers_projects dp ON p.id = dp.project_id INNER JOIN developers d ON d.id = dp.developer_id WHERE p.id = ? GROUP BY p.id;"
         );
@@ -124,9 +124,9 @@ public class ProjectDaoService extends DaoService {
     }
 
     public List<Project> findByName(String name) throws SQLException {
-        findByNameSt.setString(1, "%" + name + "%");
+        findByCaseSensitiveNameSt.setString(1, "%" + name + "%");
 
-        ResultSet resultSet = findByNameSt.executeQuery();
+        ResultSet resultSet = findByCaseSensitiveNameSt.executeQuery();
 
         List<Project> result = new ArrayList<>();
 

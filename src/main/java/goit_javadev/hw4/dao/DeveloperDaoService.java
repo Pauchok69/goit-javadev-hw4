@@ -1,15 +1,10 @@
 package goit_javadev.hw4.dao;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import goit_javadev.hw4.entity.Developer;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import goit_javadev.hw4.entity.Developer;
 
 public class DeveloperDaoService extends DaoService {
     private final PreparedStatement findAllSt;
@@ -17,6 +12,7 @@ public class DeveloperDaoService extends DaoService {
     private final PreparedStatement insertSt;
     private final PreparedStatement deleteSt;
     private final PreparedStatement updateSt;
+    private final PreparedStatement findByProjectIdSt;
 
     public DeveloperDaoService(Connection connection) throws SQLException {
         super(connection);
@@ -31,6 +27,7 @@ public class DeveloperDaoService extends DaoService {
         findSt = connection.prepareStatement("SELECT * FROM developers WHERE id = ?");
         deleteSt = connection.prepareStatement("DELETE FROM developers WHERE id = ?");
         findAllSt = connection.prepareStatement("SELECT * FROM developers");
+        findByProjectIdSt = connection.prepareStatement("SELECT d.* FROM developers d INNER JOIN developers_projects dp ON d.id = dp.developer_id INNER JOIN projects p ON p.id = dp.project_id WHERE p.id = ?");
     }
 
     protected Developer hydrate(ResultSet resultSet) throws SQLException {
@@ -106,5 +103,20 @@ public class DeveloperDaoService extends DaoService {
         }
 
         return null;
+    }
+
+    public List<Developer> findByProjectId(long projectId) throws SQLException {
+        findByProjectIdSt.setLong(1, projectId);
+
+        ResultSet resultSet = findByProjectIdSt.executeQuery();
+
+        List<Developer> result = new ArrayList<>();
+
+        while (resultSet.next()) {
+            result.add(hydrate(resultSet));
+        }
+
+        return result;
+
     }
 }

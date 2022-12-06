@@ -6,6 +6,6 @@ public class StopCommand extends Command {
 
     @Override
     public void run() {
-        print("Good bye!");
+        consoleIO.print("Good bye!");
     }
 }

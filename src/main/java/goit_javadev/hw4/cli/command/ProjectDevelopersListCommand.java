@@ -7,13 +7,13 @@ import goit_javadev.hw4.entity.Project;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class ProjectDevelopersSalaryCommand extends Command {
-    public static final String TITLE = "project:developers-salary";
-    public static final String DESCRIPTION = "Shows salary summary of all developers on the project";
+public class ProjectDevelopersListCommand extends Command {
+    public static final String TITLE = "project:developers-list";
+    public static final String DESCRIPTION = "Shows list of all developers on the project";
     private final GetProjectHelper getProjectHelper;
     private final ProjectDaoService projectDaoService;
 
-    public ProjectDevelopersSalaryCommand(Connection connection) throws SQLException {
+    public ProjectDevelopersListCommand(Connection connection) throws SQLException {
         super(connection);
 
         getProjectHelper = new GetProjectHelper(connection);
