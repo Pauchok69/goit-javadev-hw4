@@ -1,6 +1,7 @@
 package goit_javadev.hw4.cli;
 
 import goit_javadev.hw4.cli.command.CommandInterface;
+import goit_javadev.hw4.cli.command.ProjectDevelopersListCommand;
 import goit_javadev.hw4.cli.command.ProjectDevelopersSalaryCommand;
 import goit_javadev.hw4.cli.command.StopCommand;
 import goit_javadev.hw4.exceptions.CommandNotFoundException;
@@ -24,6 +25,9 @@ public class CommandsProcessor {
                 break;
             case ProjectDevelopersSalaryCommand.TITLE:
                 command = new ProjectDevelopersSalaryCommand(connection);
+                break;
+            case ProjectDevelopersListCommand.TITLE:
+                command = new ProjectDevelopersListCommand(connection);
                 break;
             default:
                 throw new CommandNotFoundException(userInput);

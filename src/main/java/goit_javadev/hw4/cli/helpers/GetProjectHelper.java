@@ -14,7 +14,7 @@ public class GetProjectHelper extends CommandHelper {
         projectDaoService = new ProjectDaoService(connection);
     }
 
-    public Project run() {
+    public Project getExistingProject() {
         while (true) {
             consoleIO.print("Enter project name:");
             String userInput = consoleIO.getUserInput();

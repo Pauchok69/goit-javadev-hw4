@@ -23,7 +23,7 @@ public class ProjectDevelopersSalaryCommand extends Command {
 
     @Override
     public void run() {
-        Project project = getProjectHelper.run();
+        Project project = getProjectHelper.getExistingProject();
         consoleIO.printf("Found project with name: %s", project.getName());
 
         try {

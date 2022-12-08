@@ -16,4 +16,15 @@ public class Developer {
 
     private List<Project> projects;
     private List<Skill> skills;
+
+    public String getInfo() {
+        return String.format(
+                "%s %s. Status: %s. Birthday: %s. Salary: %.2f",
+                firstName,
+                lastName,
+                Boolean.TRUE.equals(status) ? "active" : "disabled",
+                birthDate.toString(),
+                salary
+        );
+    }
 }
