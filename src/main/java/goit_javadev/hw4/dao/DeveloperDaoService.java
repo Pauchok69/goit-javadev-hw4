@@ -1,6 +1,7 @@
 package goit_javadev.hw4.dao;
 
 import goit_javadev.hw4.entity.Developer;
+import goit_javadev.hw4.entity.Skill;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class DeveloperDaoService extends DaoService {
     private final PreparedStatement deleteSt;
     private final PreparedStatement updateSt;
     private final PreparedStatement findByProjectIdSt;
+    private final PreparedStatement findBySkillScopeSt;
 
     public DeveloperDaoService(Connection connection) throws SQLException {
         super(connection);
@@ -28,6 +30,7 @@ public class DeveloperDaoService extends DaoService {
         deleteSt = connection.prepareStatement("DELETE FROM developers WHERE id = ?");
         findAllSt = connection.prepareStatement("SELECT * FROM developers");
         findByProjectIdSt = connection.prepareStatement("SELECT d.* FROM developers d INNER JOIN developers_projects dp ON d.id = dp.developer_id INNER JOIN projects p ON p.id = dp.project_id WHERE p.id = ?");
+        findBySkillScopeSt = connection.prepareStatement("SELECT d.* FROM developers d INNER JOIN developers_skills ds ON d.id = ds.developer_id INNER JOIN skills s ON s.id = ds.skill_id WHERE UPPER(s.scope) = ?");
     }
 
     protected Developer hydrate(ResultSet resultSet) throws SQLException {
@@ -109,6 +112,21 @@ public class DeveloperDaoService extends DaoService {
         findByProjectIdSt.setLong(1, projectId);
 
         ResultSet resultSet = findByProjectIdSt.executeQuery();
+
+        List<Developer> result = new ArrayList<>();
+
+        while (resultSet.next()) {
+            result.add(hydrate(resultSet));
+        }
+
+        return result;
+
+    }
+
+    public List<Developer> findBySkillScope(Skill.Scope scope) throws SQLException {
+        findBySkillScopeSt.setString(1, scope.name());
+
+        ResultSet resultSet = findBySkillScopeSt.executeQuery();
 
         List<Developer> result = new ArrayList<>();
 

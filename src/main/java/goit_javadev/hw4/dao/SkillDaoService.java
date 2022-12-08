@@ -1,14 +1,10 @@
 package goit_javadev.hw4.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import goit_javadev.hw4.entity.Skill;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import goit_javadev.hw4.entity.Skill;
 
 public class SkillDaoService extends DaoService {
     private final PreparedStatement findAllSt;
@@ -36,16 +32,16 @@ public class SkillDaoService extends DaoService {
         Skill skill = new Skill();
 
         skill.setId(resultSet.getLong("id"));
-        skill.setScope(resultSet.getString("scope"));
-        skill.setLevel(resultSet.getInt("level"));
+        skill.setScope(Skill.Scope.valueOf(resultSet.getString("scope").toUpperCase()));
+        skill.setLevel(Skill.Level.valueOf(resultSet.getInt("level")));
         skill.setStatus(resultSet.getBoolean("status"));
 
         return skill;
     }
 
     public long insert(Skill skill) throws SQLException {
-        insertSt.setString(1, skill.getScope());
-        insertSt.setInt(2, skill.getLevel());
+        insertSt.setString(1, String.valueOf(skill.getScope()));
+        insertSt.setInt(2, skill.getLevel().getValue());
         insertSt.setBoolean(3, skill.getStatus());
 
 
@@ -70,8 +66,8 @@ public class SkillDaoService extends DaoService {
     }
 
     public void update(Skill skill) throws SQLException {
-        updateSt.setString(1, skill.getScope());
-        updateSt.setInt(2, skill.getLevel());
+        updateSt.setString(1, skill.getScope().name());
+        updateSt.setInt(2, skill.getLevel().getValue());
         updateSt.setBoolean(3, skill.getStatus());
         updateSt.setLong(4, skill.getId());
 

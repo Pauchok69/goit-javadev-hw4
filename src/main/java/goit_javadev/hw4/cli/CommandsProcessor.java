@@ -1,9 +1,6 @@
 package goit_javadev.hw4.cli;
 
-import goit_javadev.hw4.cli.command.CommandInterface;
-import goit_javadev.hw4.cli.command.ProjectDevelopersListCommand;
-import goit_javadev.hw4.cli.command.ProjectDevelopersSalaryCommand;
-import goit_javadev.hw4.cli.command.StopCommand;
+import goit_javadev.hw4.cli.command.*;
 import goit_javadev.hw4.exceptions.CommandNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +25,9 @@ public class CommandsProcessor {
                 break;
             case ProjectDevelopersListCommand.TITLE:
                 command = new ProjectDevelopersListCommand(connection);
+                break;
+            case DeveloperSkillJavaCommand.TITLE:
+                command = new DeveloperSkillJavaCommand(connection);
                 break;
             default:
                 throw new CommandNotFoundException(userInput);
