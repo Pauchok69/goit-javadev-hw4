@@ -9,17 +9,15 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Console {
-    private final Connection connection;
     private final CommandsProcessor commandsProcessor;
 
     public Console(Connection connection) {
-        this.connection = connection;
         this.commandsProcessor = new CommandsProcessor(connection);
     }
 
     public void init() {
         while (true) {
-            System.out.println("Type a command:");
+            System.out.println("Type a command or type \"help\" to get a list of all commands:");
 
             Scanner scanner = new Scanner(System.in);
 

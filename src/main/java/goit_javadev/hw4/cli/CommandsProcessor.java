@@ -20,6 +20,9 @@ public class CommandsProcessor {
             case "quit":
                 command = new StopCommand();
                 break;
+            case HelpCommand.TITLE:
+                command = new HelpCommand();
+                break;
             case ProjectAllCommand.TITLE:
                 command = new ProjectAllCommand(connection);
                 break;
