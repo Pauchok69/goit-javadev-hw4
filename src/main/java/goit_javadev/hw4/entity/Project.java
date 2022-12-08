@@ -18,4 +18,5 @@ public class Project {
     private Double cost;
 
     private List<Developer> developers;
+    private int developersCount;
 }

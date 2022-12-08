@@ -14,6 +14,7 @@ public class ProjectDaoService extends DaoService {
     private final PreparedStatement updateSt;
     private final PreparedStatement findByCaseSensitiveNameSt;
     private final PreparedStatement getDevelopersSalarySumByProjectSt;
+    private final PreparedStatement findAllWithDevelopersCountSt;
 
     public ProjectDaoService(Connection connection) throws SQLException {
         super(connection);
@@ -28,6 +29,7 @@ public class ProjectDaoService extends DaoService {
         findSt = connection.prepareStatement("SELECT * FROM projects WHERE id = ?");
         deleteSt = connection.prepareStatement("DELETE FROM projects WHERE id = ?");
         findAllSt = connection.prepareStatement("SELECT * FROM projects");
+        findAllWithDevelopersCountSt = connection.prepareStatement("SELECT p.*, COUNT(p.id) developers_count FROM projects p INNER JOIN developers_projects dp ON p.id = dp.project_id INNER JOIN developers d ON d.id = dp.developer_id GROUP BY p.id");
         findByCaseSensitiveNameSt = connection.prepareStatement("SELECT * FROM projects WHERE LOWER(name) LIKE LOWER(?) LIMIT 50");
         getDevelopersSalarySumByProjectSt = connection.prepareStatement(
                 "SELECT SUM(d.salary) sum FROM projects p INNER JOIN developers_projects dp ON p.id = dp.project_id INNER JOIN developers d ON d.id = dp.developer_id WHERE p.id = ? GROUP BY p.id;"
@@ -106,6 +108,21 @@ public class ProjectDaoService extends DaoService {
 
         while (resultSet.next()) {
             result.add(hydrate(resultSet));
+        }
+
+        return result;
+    }
+
+    public List<Project> findAllWithDevelopersCount() throws SQLException {
+        ResultSet resultSet = findAllWithDevelopersCountSt.executeQuery();
+
+        List<Project> result = new ArrayList<>();
+
+        while (resultSet.next()) {
+            Project project = hydrate(resultSet);
+            project.setDevelopersCount(resultSet.getInt("developers_count"));
+
+            result.add(project);
         }
 
         return result;
