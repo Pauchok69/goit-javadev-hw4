@@ -15,6 +15,7 @@ public class DeveloperDaoService extends DaoService {
     private final PreparedStatement updateSt;
     private final PreparedStatement findByProjectIdSt;
     private final PreparedStatement findBySkillScopeSt;
+    private final PreparedStatement findBySkillLevelSt;
 
     public DeveloperDaoService(Connection connection) throws SQLException {
         super(connection);
@@ -31,6 +32,7 @@ public class DeveloperDaoService extends DaoService {
         findAllSt = connection.prepareStatement("SELECT * FROM developers");
         findByProjectIdSt = connection.prepareStatement("SELECT d.* FROM developers d INNER JOIN developers_projects dp ON d.id = dp.developer_id INNER JOIN projects p ON p.id = dp.project_id WHERE p.id = ?");
         findBySkillScopeSt = connection.prepareStatement("SELECT d.* FROM developers d INNER JOIN developers_skills ds ON d.id = ds.developer_id INNER JOIN skills s ON s.id = ds.skill_id WHERE UPPER(s.scope) = ?");
+        findBySkillLevelSt = connection.prepareStatement("SELECT d.* FROM developers d INNER JOIN developers_skills ds ON d.id = ds.developer_id INNER JOIN skills s ON s.id = ds.skill_id WHERE s.level = ?");
     }
 
     protected Developer hydrate(ResultSet resultSet) throws SQLException {
@@ -135,6 +137,19 @@ public class DeveloperDaoService extends DaoService {
         }
 
         return result;
+    }
 
+    public List<Developer> findBySkillLevel(Skill.Level level) throws SQLException {
+        findBySkillLevelSt.setInt(1, level.getValue());
+
+        ResultSet resultSet = findBySkillLevelSt.executeQuery();
+
+        List<Developer> result = new ArrayList<>();
+
+        while (resultSet.next()) {
+            result.add(hydrate(resultSet));
+        }
+
+        return result;
     }
 }

@@ -29,6 +29,9 @@ public class CommandsProcessor {
             case DeveloperSkillJavaCommand.TITLE:
                 command = new DeveloperSkillJavaCommand(connection);
                 break;
+            case DeveloperSkillMiddleCommand.TITLE:
+                command = new DeveloperSkillMiddleCommand(connection);
+                break;
             default:
                 throw new CommandNotFoundException(userInput);
 
